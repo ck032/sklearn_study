@@ -523,6 +523,7 @@ def check_X_y(X, y, accept_sparse=None, dtype="numeric", order=None, copy=False,
     return X, y
 
 
+# 一个维度的判断，比如模型的输出列y
 def column_or_1d(y, warn=False):
     """ Ravel column or 1d numpy array, else raises an error
 

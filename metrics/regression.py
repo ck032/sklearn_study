@@ -1,3 +1,9 @@
+# -*- coding:utf-8 -*-
+# 回归任务用来评估模型性能的矩阵
+# *_score 越高越好
+# *_error,*_loss，越小越好
+# 参考文献：http://scikit-learn.org/stable/modules/model_evaluation.html
+
 """Metrics to assess performance on regression task
 
 Functions named as ``*_score`` return a scalar value to maximize: the higher
@@ -24,6 +30,10 @@ from __future__ import division
 
 import numpy as np
 
+# column_or_1d,一个维度的判断，比如模型的输出列y
+# externals.six 针对python2\python3 通用写出来的脚本，猜测：six = 2 * 3 ,haha...
+# check_consistent_length 长度是否一致的检查
+
 from ..utils.validation import check_array, check_consistent_length
 from ..utils.validation import column_or_1d
 from ..externals.six import string_types
@@ -38,7 +48,7 @@ __ALL__ = [
     "explained_variance_score"
 ]
 
-
+# 检查y_true,y_pred长度是否一致
 def _check_reg_targets(y_true, y_pred, multioutput):
     """Check that y_true and y_pred belong to the same regression task
 
@@ -101,7 +111,7 @@ def _check_reg_targets(y_true, y_pred, multioutput):
 
     return y_type, y_true, y_pred, multioutput
 
-
+# 计算MAE指标（如果观测值有权重，根据权重来调整）
 def mean_absolute_error(y_true, y_pred,
                         sample_weight=None,
                         multioutput='uniform_average'):
@@ -172,7 +182,7 @@ def mean_absolute_error(y_true, y_pred,
 
     return np.average(output_errors, weights=multioutput)
 
-
+# 计算MSE指标（如果观测值有权重，根据权重来调整）
 def mean_squared_error(y_true, y_pred,
                        sample_weight=None,
                        multioutput='uniform_average'):
@@ -240,7 +250,7 @@ def mean_squared_error(y_true, y_pred,
 
     return np.average(output_errors, weights=multioutput)
 
-
+# 返回MAE(np.abs(y_pred - y_true))的中位数
 def median_absolute_error(y_true, y_pred):
     """Median absolute error regression loss
 
@@ -274,6 +284,10 @@ def median_absolute_error(y_true, y_pred):
         raise ValueError("Multioutput not supported in median_absolute_error")
     return np.median(np.abs(y_pred - y_true))
 
+# 模型解释的了方差，越接近于100%越好，因为此时，y被全部拟合，var(y-hat(y)) = 0
+# 首先计算var(y) = np.average((y_true - y_true_avg) ** 2)
+# 再计算var(y-hat(y))
+# explained_variance_score = 1 - var(y-hat(y)) / var(y)
 
 def explained_variance_score(y_true, y_pred,
                              sample_weight=None,
@@ -366,6 +380,8 @@ def explained_variance_score(y_true, y_pred,
 
     return np.average(output_scores, weights=avg_weights)
 
+# 计算R方
+# R方 = 1- （y-hat(y))^2 / (y-y_true_avg)^2
 
 def r2_score(y_true, y_pred,
              sample_weight=None,

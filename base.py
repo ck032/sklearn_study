@@ -17,6 +17,7 @@ class ChangedBehaviorWarning(UserWarning):
 
 
 ##############################################################################
+# clone 只是深度拷贝 学习器，包含了对应的参数，但是不包含数据，也没有在数据上做过fit
 def clone(estimator, safe=True):
     """Constructs a new estimator with the same parameters.
 
@@ -352,6 +353,7 @@ class RegressorMixin(object):
 
 
 ###############################################################################
+# 聚类-返回预测所属的类别
 class ClusterMixin(object):
     """Mixin class for all cluster estimators in scikit-learn."""
     _estimator_type = "clusterer"

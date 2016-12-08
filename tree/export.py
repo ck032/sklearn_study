@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+# 导出模型结果，用GraphViz（一种绘图软件）绘图
 """
 This module defines export functions for decision trees.
 """

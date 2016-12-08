@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 """Base classes for all estimators."""
 # Author: Gael Varoquaux <gael.varoquaux@normalesup.org>
 # License: BSD 3 clause
@@ -278,6 +279,7 @@ class BaseEstimator(object):
 
 
 ###############################################################################
+# 计算精准率- accuracy_score
 class ClassifierMixin(object):
     """Mixin class for all classifiers in scikit-learn."""
     _estimator_type = "classifier"
@@ -311,6 +313,7 @@ class ClassifierMixin(object):
 
 
 ###############################################################################
+# 计算R方- r2_score
 class RegressorMixin(object):
     """Mixin class for all regression estimators in scikit-learn."""
     _estimator_type = "regressor"
@@ -466,6 +469,7 @@ class MetaEstimatorMixin(object):
 
 ###############################################################################
 
+# 判断学习器（estimator）是回归还是分类
 def is_classifier(estimator):
     """Returns True if the given estimator is (probably) a classifier."""
     return getattr(estimator, "_estimator_type", None) == "classifier"

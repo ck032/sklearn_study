@@ -1,3 +1,5 @@
+# -*- coding:utf-8 -*-
+# 所有评分矩阵的通用脚本
 """
 Common code for all metrics
 
@@ -19,10 +21,25 @@ import numpy as np
 from ..utils import check_array, check_consistent_length
 from ..utils.multiclass import type_of_target
 
+#===============================================================
+#
+# 学习：
+#  （1）y_score = y_score.reshape((-1, 1))
+#   (2)y_true_c = y_true.take([c], axis=not_average_axis).ravel()
+#   (3)np.average()
+#   (4)np.repeat(score_weight, y_true.shape[1])
+#   (5)np.sum(y_true, axis=0)
+#
+# 学习知识点：
+#   reshape\take\ravel\average\repeat\sum
+#===============================================================
 
 class UndefinedMetricWarning(UserWarning):
     pass
 
+# 输入：评估矩阵、y_true、y_score、average的类型、sample_weight、样本权重sample_weight
+# 输出：评估矩阵对应的得分-score
+# 应用：ranking.py脚本中计算 average_precision_score、roc_auc_score 有用到
 
 def _average_binary_score(binary_metric, y_true, y_score, average,
                           sample_weight=None):
@@ -66,15 +83,18 @@ def _average_binary_score(binary_metric, y_true, y_score, average,
         classes.
 
     """
+    # 比如一个二分类器，多个二分类学习器，怎么求查全率
     average_options = (None, 'micro', 'macro', 'weighted', 'samples')
     if average not in average_options:
         raise ValueError('average has to be one of {0}'
                          ''.format(average_options))
 
+    # y的类型，只支持二分类、多个二分类
     y_type = type_of_target(y_true)
     if y_type not in ("binary", "multilabel-indicator"):
         raise ValueError("{0} format is not supported".format(y_type))
 
+    # binary_metric 是应该制定的，比如查准率
     if y_type == "binary":
         return binary_metric(y_true, y_score, sample_weight=sample_weight)
 
@@ -122,6 +142,7 @@ def _average_binary_score(binary_metric, y_true, y_score, average,
                                  sample_weight=score_weight)
 
     # Average the results
+    # 如果average不是None ，求平均
     if average is not None:
         return np.average(score, weights=average_weight)
     else:

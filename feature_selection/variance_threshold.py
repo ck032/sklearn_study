@@ -1,3 +1,8 @@
+# -*- coding:utf-8 -*-
+# 特征筛选：针对连续变量-如果一个特征的方差很小（默认值为0），那么把这个变量剔除出去
+# 可以设定阈值(threshold)
+# fit_transform，fit
+
 # Author: Lars Buitinck <L.J.Buitinck@uva.nl>
 # License: 3-clause BSD
 
@@ -45,6 +50,8 @@ class VarianceThreshold(BaseEstimator, SelectorMixin):
     def __init__(self, threshold=0.):
         self.threshold = threshold
 
+    # np.var 可以用来求方差
+    # msg 也用if函数判断后再加上一部分comment
     def fit(self, X, y=None):
         """Learn empirical variances from X.
 
